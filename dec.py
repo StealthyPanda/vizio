@@ -21,6 +21,7 @@ def gpustatus():
         st.warning("Not using GPU!")
         warning("No GPU found!")
 
+gpustatus()
 # if 'gpushown' not in st.session_state:
 #     gpustatus()
 #     st.session_state['gpushown'] =  True
@@ -31,7 +32,8 @@ left, _, right = st.columns([2, 1, 7])
 
 left.markdown("### Model Inputs")
 mult = left.number_input('Multiplier:', value = 1.)
-inputs = [left.slider(f'Input {i}', 0., 10., 0., step = 0.0001) * mult for i in range(model.input_shape[-1])]
+defvals = [6.22, 5.66, 5.61, 8.52, 7.79]
+inputs = [left.slider(f'Input {i}', 0., 10., defvals[i], step = 0.0001) * mult for i in range(model.input_shape[-1])]
 
 def getplotoutput(inputs, parent):
     output = np.reshape(model(np.array(inputs, dtype = np.float32).reshape(1, model.input_shape[-1])), (28, 28))
