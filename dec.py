@@ -20,14 +20,18 @@ def gpustatus():
     else:
         st.warning("Not using GPU!")
         warning("No GPU found!")
-gpustatus()
+
+# if 'gpushown' not in st.session_state:
+#     gpustatus()
+#     st.session_state['gpushown'] =  True
 
 model = tf.keras.models.load_model('decoder.keras')
 
 left, _, right = st.columns([2, 1, 7])
 
 left.markdown("### Model Inputs")
-inputs = [left.slider(f'Input {i}', -10., 10., 0., step = 0.0001) for i in range(model.input_shape[-1])]
+mult = left.number_input('Multiplier:', value = 1.)
+inputs = [left.slider(f'Input {i}', 0., 10., 0., step = 0.0001) * mult for i in range(model.input_shape[-1])]
 
 def getplotoutput(inputs, parent):
     output = np.reshape(model(np.array(inputs, dtype = np.float32).reshape(1, model.input_shape[-1])), (28, 28))
